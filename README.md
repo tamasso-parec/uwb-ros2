@@ -43,8 +43,9 @@ Make sure that all anchors in the UWB network are up and running. Then
 
 1. Connect with your device to the desired UWB antenna via USB;
 2. Check the port with the command `ls /dev/tty*`;
-3. Modify the configuration file `uwb-serial-ros2/config/params.yaml` with the correct port name;
-4. To run the node with the configuration file use the command
+3. Open the port with `sudo chmod 666 ~port_name~`;
+4. Modify the configuration file `uwb-serial-ros2/config/params.yaml` with the correct port name;
+5. To run the node with the configuration file use the command
 
     ```
     ros2 launch uwb_serial uwb

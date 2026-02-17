@@ -22,11 +22,15 @@ setup(
     maintainer_email='davide.dorigoni@unitn.it',
     description='Interfaces with UWB network to publish measurements',
     license='Apache-2.0',
-    tests_require=['pytest'],
+    extras_require={
+        'test': [
+            'pytest',
+        ],
+    },
     entry_points={
         'console_scripts': [
-            'uwb = uwb_serial.uwb:uwb',
-            'uwbCustomMsg = uwb_serial.uwb:uwbCustomMsg',
+            'uwb = uwb_serial.uwb:main',
+            # 'uwbCustomMsg = uwb_serial.uwbCustomMsg:UWB',
         ],
     },
 )

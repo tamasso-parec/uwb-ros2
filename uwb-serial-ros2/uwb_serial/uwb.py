@@ -10,25 +10,11 @@ from sensor_msgs.msg import Range
 from ament_index_python.packages import get_package_share_directory
 
 
-def parseSerialDataUWB(serial_data):
-    """Parse the serial data from a UWB network."""
-    if not serial_data.strip():  # Skip empty lines
-        return None
-
-    sequence_number, id_self, id_other, distance = serial_data.split()
-    parsed_data = {
-        'seq': int(sequence_number),
-        'id_self': int(id_self),
-        'id_other': int(id_other),
-        'range': float(distance),
-    }
-    return parsed_data
-
-
 class UWB(Node):
 
     def __init__(self):
-        super().__init__('uwb_serial')
+
+        super().__init__('uwb_node')
 
         self.declare_parameter('usb_port', '/dev/ttyACM0')
         self.declare_parameter('timer_rate_s', 0.02)
@@ -38,6 +24,7 @@ class UWB(Node):
         self.declare_parameter('anchors_calib_files', ['none'])
         self.declare_parameter('max_range_m', 20.0)
         self.declare_parameter('min_range_m', 0.1)
+        self.declare_parameter('namespace', '')
 
         usb_port_name = self.get_parameter('usb_port')\
             .get_parameter_value().string_value
@@ -55,6 +42,8 @@ class UWB(Node):
             .get_parameter_value().double_value
         self.min_range_ = self.get_parameter('min_range_m')\
             .get_parameter_value().double_value
+        self.namespace_ = self.get_parameter('namespace')\
+            .get_parameter_value().string_value
 
         self.get_logger().info(
             f"Parameters:\n"
@@ -65,7 +54,8 @@ class UWB(Node):
             f"  Compensation Type: {self.compensation_type_}\n"
             f"  Calibration Filenames: {self.calib_filenames_}\n"
             f"  Max Range (m): {self.max_range_}\n"
-            f"  Min Range (m): {self.min_range_}"
+            f"  Min Range (m): {self.min_range_}\n"
+            f"  Namespace: {self.namespace_}"
         )
         # Use the specified calibration files to generate a lookup table to 
         # estimate the offset
@@ -115,7 +105,7 @@ class UWB(Node):
                 msg.min_range = self.min_range_
                 msg.range = range_compensated
                 msg.header.stamp = self.get_clock().now().to_msg()
-                msg.header.frame_id = 'uwb' + str(parsed_data['id_self'])
+                msg.header.frame_id = self.namespace_ + '/uwb' + str(parsed_data['id_self'])
 
                 self.pub_.publish(msg)
 
@@ -195,7 +185,28 @@ class UWB(Node):
         self.ser_.close()
 
 
+
+
+def parseSerialDataUWB(serial_data):
+    """Parse the serial data from a UWB network."""
+    if not serial_data.strip():  # Skip empty lines
+        return None
+
+    sequence_number, id_self, id_other, distance = serial_data.split()
+    parsed_data = {
+        'seq': int(sequence_number),
+        'id_self': int(id_self),
+        'id_other': int(id_other),
+        'range': float(distance),
+    }
+    return parsed_data
+
+
+
 def main(args=None):
+
+    print("Starting UWB serial node...")
+
     rclpy.init(args=args, signal_handler_options=SignalHandlerOptions.NO)
 
     node = UWB()

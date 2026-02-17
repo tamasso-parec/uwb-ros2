@@ -3,7 +3,8 @@
     usb_port: '/dev/ttyACM0'
     boudrate: 115200
     topic_name: 'uwb/range'
+    namespace: ''
     anchors_calib_files:
       - 'calib1.csv'
       - 'calib2.csv'
-    compensation: 2 # 0: no compensation, 1: lookup table compensation, 2: linear interpolation
+    compensation: 0 # 0: no compensation, 1: lookup table compensation, 2: linear interpolation
