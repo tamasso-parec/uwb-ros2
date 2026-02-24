@@ -1,10 +1,14 @@
-/uwb_serial:
+/uwb_node:
   ros__parameters:
-    usb_port: '/dev/ttyACM0'
-    boudrate: 115200
-    topic_name: 'uwb/range'
-    namespace: ''
     anchors_calib_files:
-      - 'calib1.csv'
-      - 'calib2.csv'
-    compensation: 0 # 0: no compensation, 1: lookup table compensation, 2: linear interpolation
+    - /home/tom/Documents/PhD/limo_ws/src/uwb-ros2/uwb-serial-ros2/config/calib1.csv
+    boudrate: 115200
+    compensation: 2
+    max_range_m: 20.0
+    min_range_m: 0.1
+    namespace: ''
+    timer_rate_s: 0.02
+    topic_name: uwb/range
+    usb_port: /dev/ttyACM0
+    use_sim_time: false
+

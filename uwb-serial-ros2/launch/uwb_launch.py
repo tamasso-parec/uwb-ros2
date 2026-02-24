@@ -23,10 +23,10 @@ def generate_launch_description():
 		'namespace', default_value=''
 	)
 
-    config_file = LaunchConfiguration('config_file')
+    config_file = LaunchConfiguration('params_file')
 
     config_file_launch = DeclareLaunchArgument(
-		'config_file', default_value='params.yaml'
+		'params_file', default_value='params.yaml'
 	)
 
     config_file_path = PathJoinSubstitution(
@@ -47,5 +47,6 @@ def generate_launch_description():
             namespace=namespace,
             output='screen',
             parameters=[config_file_path],
+            ros_arguments = ['--params-file', config_file_path]
         ),
     ])

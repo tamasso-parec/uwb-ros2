@@ -1,7 +1,7 @@
 import rclpy
 import serial
 from rclpy.node import Node
-from rclpy.signals import SignalHandlerOptions
+# from rclpy.signals import SignalHandlerOptions
 import time
 import csv
 import os
@@ -101,10 +101,10 @@ class UWB(Node):
                     return
 
                 msg = Range()
-                msg.max_range = self.max_range_
-                msg.min_range = self.min_range_
-                msg.range = range_compensated
-                msg.header.stamp = self.get_clock().now().to_msg()
+                msg.max_range       = self.max_range_
+                msg.min_range       = self.min_range_
+                msg.range           = range_compensated
+                msg.header.stamp    = self.get_clock().now().to_msg()
                 msg.header.frame_id = self.namespace_ + '/uwb' + str(parsed_data['id_self'])
 
                 self.pub_.publish(msg)
@@ -207,7 +207,7 @@ def main(args=None):
 
     print("Starting UWB serial node...")
 
-    rclpy.init(args=args, signal_handler_options=SignalHandlerOptions.NO)
+    rclpy.init(args=args)#, signal_handler_options=SignalHandlerOptions.NO)
 
     node = UWB()
     try:

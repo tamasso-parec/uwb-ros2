@@ -48,5 +48,5 @@ Make sure that all anchors in the UWB network are up and running. Then
 5. To run the node with the configuration file use the command
 
     ```
-    ros2 launch uwb_serial uwb
+    ros2 launch uwb_serial uwb_launch.py
     ```
